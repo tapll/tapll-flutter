@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:union_analytics/src/stack_parser.dart';
+import 'package:tapll/src/stack_parser.dart';
 
 /// A [StackTrace] with fixed text, as the VM would print it.
 class _Trace implements StackTrace {
@@ -29,7 +29,7 @@ void main() {
       expect(frames.length, 7);
       expect(
         frames[0],
-        const UnionStackFrame(
+        const TapllStackFrame(
           function: '_CheckoutState._pay.<anonymous closure>',
           module: 'my_app',
           file: 'package:my_app/checkout/checkout_page.dart',
@@ -42,7 +42,7 @@ void main() {
       expect(frames[1].inApp, isTrue);
       expect(frames[2].module, 'flutter');
       expect(frames[2].inApp, isFalse);
-      expect(frames[3], const UnionStackFrame(function: '_rootRunUnary', module: 'dart:async', file: 'dart:async/zone.dart', line: 1407, column: 47, inApp: false));
+      expect(frames[3], const TapllStackFrame(function: '_rootRunUnary', module: 'dart:async', file: 'dart:async/zone.dart', line: 1407, column: 47, inApp: false));
       expect(frames[5].inApp, isTrue);
       expect(frames[6].module, 'my_feature');
       expect(frames[6].inApp, isTrue, reason: 'inAppPackages');
@@ -101,7 +101,7 @@ void main() {
       expect(frames[0].column, isNull);
       expect(frames[1].file, 'dart:core');
       expect(frames[1].line, isNull);
-      expect(frames[2], const UnionStackFrame(function: '<fn>', inApp: false));
+      expect(frames[2], const TapllStackFrame(function: '<fn>', inApp: false));
     });
 
     test('AOT frames from --split-debug-info keep their address, never in app', () {
@@ -149,7 +149,7 @@ package:my_app/api.dart 8:1                       Api.post
         rule: _rule,
       );
       expect(frames.map((f) => f.function), ['main', 'State.setState', '_rootRunUnary', 'Api.post']);
-      expect(frames[0], const UnionStackFrame(function: 'main', module: 'my_app', file: 'package:my_app/main.dart', line: 10, column: 5, inApp: true));
+      expect(frames[0], const TapllStackFrame(function: 'main', module: 'my_app', file: 'package:my_app/main.dart', line: 10, column: 5, inApp: true));
       expect(frames[1].inApp, isFalse);
       expect(frames[2].module, 'dart:async');
     });
@@ -176,7 +176,7 @@ package:my_app/api.dart 8:1                       Api.post
     });
 
     test('a real StackTrace.current parses without throwing', () {
-      final frames = parseDartStackTrace(StackTrace.current, rule: const InAppRule(rootPackage: 'union_analytics'));
+      final frames = parseDartStackTrace(StackTrace.current, rule: const InAppRule(rootPackage: 'tapll'));
       expect(frames, isNotEmpty);
     });
   });
@@ -184,7 +184,7 @@ package:my_app/api.dart 8:1                       Api.post
   group('inferRootPackage', () {
     test('first package: frame that is not this plugin or flutter', () {
       final pkg = inferRootPackage(_Trace('''
-#0      Union.configure (package:union_analytics/src/union.dart:40:5)
+#0      Tapll.configure (package:tapll/src/tapll.dart:40:5)
 #1      main (package:my_app/main.dart:8:9)
 #2      _runMain (dart:ui/hooks.dart:300:23)
 '''));
@@ -194,7 +194,7 @@ package:my_app/api.dart 8:1                       Api.post
     test('skips flutter frames', () {
       expect(
         inferRootPackage(_Trace('''
-#0      Union.configure (package:union_analytics/src/union.dart:40:5)
+#0      Tapll.configure (package:tapll/src/tapll.dart:40:5)
 #1      Binding.run (package:flutter/src/x.dart:1:1)
 #2      main (package:shop/main.dart:8:9)
 ''')),
@@ -205,8 +205,8 @@ package:my_app/api.dart 8:1                       Api.post
     test('null when the stack only has file: frames (flutter test)', () {
       expect(
         inferRootPackage(_Trace('''
-#0      Union.configure (file:///x/union-flutter/lib/src/union.dart:40:5)
-#1      main (file:///x/union-flutter/test/union_test.dart:8:9)
+#0      Tapll.configure (file:///x/tapll-flutter/lib/src/tapll.dart:40:5)
+#1      main (file:///x/tapll-flutter/test/tapll_test.dart:8:9)
 ''')),
         isNull,
       );

@@ -1,6 +1,6 @@
 /// One parsed frame of a Dart stack, in the shape the native `ManagedFrame` takes.
-class UnionStackFrame {
-  const UnionStackFrame({
+class TapllStackFrame {
+  const TapllStackFrame({
     required this.function,
     this.module,
     this.file,
@@ -33,7 +33,7 @@ class UnionStackFrame {
 
   @override
   bool operator ==(Object other) =>
-      other is UnionStackFrame &&
+      other is TapllStackFrame &&
       other.function == function &&
       other.module == module &&
       other.file == file &&
@@ -45,7 +45,7 @@ class UnionStackFrame {
   int get hashCode => Object.hash(function, module, file, line, column, inApp);
 
   @override
-  String toString() => 'UnionStackFrame($function, $module, $file:$line:$column, inApp: $inApp)';
+  String toString() => 'TapllStackFrame($function, $module, $file:$line:$column, inApp: $inApp)';
 }
 
 /// Which frames count as the app's own code (`in_app: true`).
@@ -101,9 +101,9 @@ final RegExp _location = RegExp(r'^(.*?)(?::(\d+))?(?::(\d+))?$');
 /// Understands the VM format (JIT and AOT, with `<asynchronous suspension>` and async gap lines
 /// skipped), the `package:stack_trace` friendly format, and AOT `abs` addresses from builds with
 /// `--split-debug-info`. Lines it does not understand are skipped; it never throws.
-List<UnionStackFrame> parseDartStackTrace(StackTrace? stack, {InAppRule rule = const InAppRule()}) {
-  if (stack == null) return const <UnionStackFrame>[];
-  final frames = <UnionStackFrame>[];
+List<TapllStackFrame> parseDartStackTrace(StackTrace? stack, {InAppRule rule = const InAppRule()}) {
+  if (stack == null) return const <TapllStackFrame>[];
+  final frames = <TapllStackFrame>[];
   try {
     for (final raw in stack.toString().split('\n')) {
       if (frames.length >= maxStackFrames) break;
@@ -118,14 +118,14 @@ List<UnionStackFrame> parseDartStackTrace(StackTrace? stack, {InAppRule rule = c
   return frames;
 }
 
-UnionStackFrame? _parseLine(String line, InAppRule rule) {
+TapllStackFrame? _parseLine(String line, InAppRule rule) {
   // Async gaps: `<asynchronous suspension>`, `===== asynchronous gap ===========`.
   if (line.startsWith('<asynchronous') || line.startsWith('=====')) return null;
 
   final abs = _vmAbs.firstMatch(line);
   if (abs != null) {
     final rest = abs.group(3);
-    return UnionStackFrame(
+    return TapllStackFrame(
       function: (rest == null || rest.isEmpty) ? 'abs 0x${abs.group(2)}' : rest,
       inApp: false,
     );
@@ -138,7 +138,7 @@ UnionStackFrame? _parseLine(String line, InAppRule rule) {
   if (line.startsWith('#')) {
     final bare = _vmBare.firstMatch(line);
     if (bare == null) return null;
-    return UnionStackFrame(function: bare.group(2)!, inApp: false);
+    return TapllStackFrame(function: bare.group(2)!, inApp: false);
   }
 
   final friendly = _friendly.firstMatch(line);
@@ -151,12 +151,12 @@ UnionStackFrame? _parseLine(String line, InAppRule rule) {
   return null;
 }
 
-UnionStackFrame _frame({required String function, required String location, required InAppRule rule}) {
+TapllStackFrame _frame({required String function, required String location, required InAppRule rule}) {
   final m = _location.firstMatch(location)!;
   final uri = m.group(1)!;
   // `dart:core` has no `:line`; `_location` leaves line/column null then.
   final scheme = Uri.tryParse(uri)?.scheme;
-  return UnionStackFrame(
+  return TapllStackFrame(
     function: function,
     module: _module(uri, scheme),
     file: _file(uri, scheme),
@@ -190,7 +190,7 @@ String? _file(String uri, String? scheme) {
   return slash < 0 ? path : path.substring(slash + 1);
 }
 
-/// The app's root package, read from the call site of `Union.configure`: the first `package:` frame
+/// The app's root package, read from the call site of `Tapll.configure`: the first `package:` frame
 /// that is neither this plugin nor Flutter itself. `null` when the stack has no such frame (for
 /// example `flutter test`, which prints `file:` URIs).
 String? inferRootPackage(StackTrace stack) {
@@ -199,7 +199,7 @@ String? inferRootPackage(StackTrace stack) {
     final module = frame?.module;
     if (frame == null || module == null || frame.file == null) continue;
     if (!frame.file!.startsWith('package:')) continue;
-    if (module == 'union_analytics' || module == 'flutter') continue;
+    if (module == 'tapll' || module == 'flutter') continue;
     return module;
   }
   return null;

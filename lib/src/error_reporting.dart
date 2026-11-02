@@ -58,7 +58,7 @@ class DartErrorReporter {
       var reason = error.toString();
       if (reason.length > maxReasonLength) reason = reason.substring(0, maxReasonLength);
       final frames = parseDartStackTrace(stack, rule: _rule);
-      sendUnion('recordManagedError', <String, Object?>{
+      sendTapll('recordManagedError', <String, Object?>{
         'type': error.runtimeType.toString(),
         'reason': reason,
         'frames': [for (final f in frames) f.toMap()],
@@ -66,7 +66,7 @@ class DartErrorReporter {
         'thread': 'main',
       });
     } catch (e) {
-      unionDebugLog('could not report error: $e');
+      tapllDebugLog('could not report error: $e');
     }
   }
 }

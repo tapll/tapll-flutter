@@ -15,10 +15,10 @@ Map<String, Object> sanitizeProperties(Map<String, Object>? properties, {String 
       if (value.isFinite) {
         out[key] = value;
       } else {
-        unionDebugLog('$context: property "$key" dropped, number is not finite');
+        tapllDebugLog('$context: property "$key" dropped, number is not finite');
       }
     } else {
-      unionDebugLog('$context: property "$key" dropped, ${value.runtimeType} is not String, num or bool');
+      tapllDebugLog('$context: property "$key" dropped, ${value.runtimeType} is not String, num or bool');
     }
   });
   return out;
@@ -33,7 +33,7 @@ Map<String, String> sanitizeTraits(Map<String, String>? traits) {
     if ((value as Object?) is String) {
       out[key] = value;
     } else {
-      unionDebugLog('identify: trait "$key" dropped, value is not a String');
+      tapllDebugLog('identify: trait "$key" dropped, value is not a String');
     }
   });
   return out;

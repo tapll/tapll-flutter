@@ -1,4 +1,4 @@
-/// Mirrors `privacy_mode` in the wire contract. Must match the project's setting in Union
+/// Mirrors `privacy_mode` in the wire contract. Must match the project's setting in Tapll
 /// (Settings -> Privacy); it cannot be changed later.
 enum PrivacyMode {
   /// Never persists an install id or user id.
@@ -13,7 +13,7 @@ enum PrivacyMode {
   final String wire;
 }
 
-/// The event's role inside a feature. See the feature plan section of the Union setup prompt.
+/// The event's role inside a feature. See the feature plan section of the Tapll setup prompt.
 enum FeatureRole {
   discovery,
   start,
@@ -26,7 +26,7 @@ enum FeatureRole {
 }
 
 /// Mirrors `environment` in the wire contract.
-enum UnionEnvironment {
+enum TapllEnvironment {
   development,
   testflight,
   production;
@@ -34,8 +34,8 @@ enum UnionEnvironment {
   String get wire => name;
 }
 
-/// Verbosity of the native SDK's own logging (Logcat tag `Union`, Xcode console).
-enum UnionLogLevel {
+/// Verbosity of the native SDK's own logging (Logcat tag `Tapll`, Xcode console).
+enum TapllLogLevel {
   debug,
   info,
   warning,
@@ -45,13 +45,13 @@ enum UnionLogLevel {
   String get wire => name;
 }
 
-/// Options for [Union.configure].
+/// Options for [Tapll.configure].
 ///
 /// Only the options a Flutter app needs. `automaticScreenTracking` is deliberately not exposed:
-/// screens come from [UnionNavigatorObserver] (or [Union.screen]), and the native automatic tracking
+/// screens come from [TapllNavigatorObserver] (or [Tapll.screen]), and the native automatic tracking
 /// would report the single `FlutterViewController` / `FlutterActivity` instead of Dart routes.
-class UnionOptions {
-  const UnionOptions({
+class TapllOptions {
+  const TapllOptions({
     this.environment,
     this.logLevel,
     this.crashReporting = true,
@@ -61,10 +61,10 @@ class UnionOptions {
 
   /// Overrides the native environment detection (debug build -> `development`).
   /// On Android a pre-release store build that should read as `testflight` must set this.
-  final UnionEnvironment? environment;
+  final TapllEnvironment? environment;
 
   /// Native SDK log level. `null` keeps the native default (`warning`).
-  final UnionLogLevel? logLevel;
+  final TapllLogLevel? logLevel;
 
   /// Native crash reporting and uncaught Dart error reporting. On by default. `false` installs
   /// nothing on either side, including the Dart error handlers.

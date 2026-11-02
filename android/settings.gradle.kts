@@ -1,1 +1,1 @@
-rootProject.name = "union_analytics"
+rootProject.name = "tapll"

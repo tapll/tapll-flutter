@@ -1,5 +1,5 @@
-group = "dev.useunion.union_analytics"
-version = "0.1.0"
+group = "com.tapll.tapll"
+version = "0.2.0"
 
 buildscript {
     val kotlinVersion = "2.4.0"
@@ -26,7 +26,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.useunion.union_analytics"
+    namespace = "com.tapll.tapll"
 
     compileSdk = 36
 
@@ -73,8 +73,8 @@ kotlin {
 
 dependencies {
     // The native SDK. Not published to Maven Central yet: until it is, the app's repositories must
-    // include mavenLocal() after `./gradlew publishToMavenLocal` in union-android (the example app does).
-    implementation("dev.useunion:union:0.1.0")
+    // include mavenLocal() after `./gradlew publishToMavenLocal` in tapll-android (the example app does).
+    implementation("com.tapll:tapll:0.2.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:union_analytics/union_analytics.dart';
+import 'package:tapll/tapll.dart';
 
 import 'helpers.dart';
 
@@ -30,8 +30,8 @@ void main() {
     rec.dispose();
   });
 
-  Future<void> configure({UnionOptions? options}) =>
-      Union.configure(writeKey: 'k', privacyMode: PrivacyMode.productAnalytics, options: options);
+  Future<void> configure({TapllOptions? options}) =>
+      Tapll.configure(writeKey: 'k', privacyMode: PrivacyMode.productAnalytics, options: options);
 
   List<dynamic> managedErrors() => rec.named('recordManagedError');
 
@@ -113,7 +113,7 @@ void main() {
   test('crashReporting: false installs no Dart handlers', () async {
     final before = FlutterError.onError;
     final beforeDispatcher = PlatformDispatcher.instance.onError;
-    await configure(options: const UnionOptions(crashReporting: false));
+    await configure(options: const TapllOptions(crashReporting: false));
     expect(identical(FlutterError.onError, before), isTrue);
     expect(identical(PlatformDispatcher.instance.onError, beforeDispatcher), isTrue);
   });
@@ -151,7 +151,7 @@ void main() {
     // Under `flutter test` the configure call site has file: frames, so the root package is unknown and
     // only inAppPackages count for package: frames.
     FlutterError.onError = (_) {};
-    await configure(options: const UnionOptions(inAppPackages: ['my_feature']));
+    await configure(options: const TapllOptions(inAppPackages: ['my_feature']));
     FlutterError.onError!(FlutterErrorDetails(
       exception: Exception('x'),
       stack: StackTrace.fromString('''

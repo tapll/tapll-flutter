@@ -1,6 +1,6 @@
-# union_analytics_example
+# tapll_example
 
-Demonstrates how to use the union_analytics plugin.
+Demonstrates how to use the tapll plugin.
 
 ## Getting Started
 

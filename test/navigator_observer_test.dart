@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:union_analytics/union_analytics.dart';
+import 'package:tapll/tapll.dart';
 
 import 'helpers.dart';
 
@@ -17,25 +17,25 @@ void main() {
       MaterialPageRoute<void>(settings: RouteSettings(name: name), builder: (_) => const SizedBox());
 
   test('push sends the route name', () async {
-    UnionNavigatorObserver().didPush(page('/checkout'), page('/'));
+    TapllNavigatorObserver().didPush(page('/checkout'), page('/'));
     await settle();
     expect(screens(), ['/checkout']);
   });
 
   test('pop sends the page that reappears', () async {
-    UnionNavigatorObserver().didPop(page('/checkout'), page('/'));
+    TapllNavigatorObserver().didPop(page('/checkout'), page('/'));
     await settle();
     expect(screens(), ['/']);
   });
 
   test('replace sends the new route', () async {
-    UnionNavigatorObserver().didReplace(newRoute: page('/b'), oldRoute: page('/a'));
+    TapllNavigatorObserver().didReplace(newRoute: page('/b'), oldRoute: page('/a'));
     await settle();
     expect(screens(), ['/b']);
   });
 
   test('unnamed routes are skipped on push, pop and replace', () async {
-    final o = UnionNavigatorObserver();
+    final o = TapllNavigatorObserver();
     o.didPush(page(null), page('/'));
     o.didPush(page(''), page('/'));
     o.didPop(page('/x'), page(null));
@@ -47,7 +47,7 @@ void main() {
   });
 
   test('dialogs and sheets are not screens, and closing one does not re-report the page', () async {
-    final o = UnionNavigatorObserver();
+    final o = TapllNavigatorObserver();
     final dialog = _PopupStub(const RouteSettings(name: '/dialog'));
     o.didPush(dialog, page('/'));
     o.didPop(dialog, page('/'));
@@ -58,7 +58,7 @@ void main() {
   testWidgets('in a real Navigator: initial route, push, pop, pushReplacement', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        navigatorObservers: [UnionNavigatorObserver()],
+        navigatorObservers: [TapllNavigatorObserver()],
         routes: {
           '/': (_) => const Scaffold(body: Text('home')),
           '/a': (_) => const Scaffold(body: Text('a')),

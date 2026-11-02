@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:union_analytics/union_analytics.dart';
+import 'package:tapll/tapll.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // privacyMode must match the project in Union (Settings -> Privacy); it cannot be changed later.
-  await Union.configure(
+  // privacyMode must match the project in Tapll (Settings -> Privacy); it cannot be changed later.
+  await Tapll.configure(
     writeKey: 'av_example_key',
     privacyMode: PrivacyMode.productAnalytics,
-    options: const UnionOptions(logLevel: UnionLogLevel.debug),
+    options: const TapllOptions(logLevel: TapllLogLevel.debug),
   );
   runApp(const ExampleApp());
 }
@@ -18,8 +18,8 @@ class ExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Union example',
-      navigatorObservers: [UnionNavigatorObserver()],
+      title: 'Tapll example',
+      navigatorObservers: [TapllNavigatorObserver()],
       routes: {
         '/': (_) => const HomePage(),
         '/checkout': (_) => const CheckoutPage(),
@@ -34,13 +34,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Union example')),
+      appBar: AppBar(title: const Text('Tapll example')),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             FilledButton(
-              onPressed: () => Union.track('settings_changed', properties: {'setting': 'units'}),
+              onPressed: () => Tapll.track('settings_changed', properties: {'setting': 'units'}),
               child: const Text('Track an event'),
             ),
             FilledButton(
@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
               child: const Text('Open checkout (a screen)'),
             ),
             FilledButton(
-              onPressed: () => Union.recordError('ExampleError', reason: 'recorded from the example'),
+              onPressed: () => Tapll.recordError('ExampleError', reason: 'recorded from the example'),
               child: const Text('Record an error'),
             ),
             FilledButton(
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
 class CheckoutPage extends StatelessWidget {
   const CheckoutPage({super.key});
 
-  static final checkout = Union.feature('checkout');
+  static final checkout = Tapll.feature('checkout');
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
-name: union_analytics
-description: "Product analytics and crash reporting for Flutter apps, for the Union platform. A thin wrapper over the native Union iOS and Android SDKs."
-version: 0.1.0
-homepage: https://useunion.dev
-repository: https://github.com/useunion/union-flutter
+name: tapll
+description: "Product analytics and crash reporting for Flutter apps, for the Tapll platform. A thin wrapper over the native Tapll iOS and Android SDKs."
+version: 0.2.0
+homepage: https://tapll.com
+repository: https://github.com/tapll/tapll-flutter
 
 environment:
   sdk: ^3.5.0
@@ -21,7 +21,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: dev.useunion.union_analytics
-        pluginClass: UnionAnalyticsPlugin
+        package: com.tapll.tapll
+        pluginClass: TapllPlugin
       ios:
-        pluginClass: UnionAnalyticsPlugin
+        pluginClass: TapllPlugin

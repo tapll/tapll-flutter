@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Records every call on the Union channel; replies with [replies] by method (default null).
+/// Records every call on the Tapll channel; replies with [replies] by method (default null).
 class ChannelRecorder {
   ChannelRecorder({Map<String, Object? Function(MethodCall)> replies = const {}}) : _replies = replies {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      const MethodChannel('dev.useunion/union'),
+      const MethodChannel('com.tapll/tapll'),
       (call) async {
         calls.add(call);
         final reply = _replies[call.method];
@@ -19,7 +19,7 @@ class ChannelRecorder {
 
   void dispose() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      const MethodChannel('dev.useunion/union'),
+      const MethodChannel('com.tapll/tapll'),
       null,
     );
   }
@@ -29,5 +29,5 @@ class ChannelRecorder {
   Map<Object?, Object?> args(int index) => calls[index].arguments as Map<Object?, Object?>;
 }
 
-/// `sendUnion` is fire-and-forget; let the mock messenger deliver before asserting.
+/// `sendTapll` is fire-and-forget; let the mock messenger deliver before asserting.
 Future<void> settle() => Future<void>.delayed(Duration.zero);

@@ -1,22 +1,22 @@
 import 'package:flutter/widgets.dart';
 
-import 'union.dart';
+import 'tapll.dart';
 
-/// Sends `Union.screen(route.settings.name)` when a page becomes visible: on push, on pop (the page
+/// Sends `Tapll.screen(route.settings.name)` when a page becomes visible: on push, on pop (the page
 /// underneath reappears) and on replace.
 ///
 /// **Named routes only.** A route without `RouteSettings.name` is skipped, so give routes stable
 /// names (`MaterialApp.routes`, `onGenerateRoute`, `GoRoute(name: ...)`). Only page routes count:
 /// dialogs, bottom sheets and popups are not screens, and closing one does not re-report the page
 /// under it.
-class UnionNavigatorObserver extends NavigatorObserver {
-  UnionNavigatorObserver();
+class TapllNavigatorObserver extends NavigatorObserver {
+  TapllNavigatorObserver();
 
   void _screen(Route<dynamic>? route) {
     if (route is! PageRoute) return;
     final name = route.settings.name;
     if (name == null || name.isEmpty) return;
-    Union.screen(name);
+    Tapll.screen(name);
   }
 
   @override
